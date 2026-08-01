@@ -1,0 +1,409 @@
+/* =========================================================
+   NITHYA & KRUPAKARAN — WEDDING INVITATION
+   Design language: royal Indian — mandala, jali lattice, marigold.
+   Deep maroon / antique gold / ivory / marigold / jewel green.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Marcellus&family=Mukta:wght@400;500;600;700&display=swap');
+
+:root{
+  /* ---- color tokens ---- */
+  --maroon-900: #3A0A11;
+  --maroon-800: #4A0E17;
+  --maroon-700: #6B1420;
+  --gold: #C89B3C;
+  --gold-light: #EAD9A0;
+  --gold-bright: #E8C468;
+  --ivory: #FBF3E4;
+  --ivory-dim: #F3E6CC;
+  --marigold: #E2790F;
+  --jewel-green: #1F4D3A;
+  --ink: #2A140C;
+
+  /* ---- type tokens ---- */
+  --font-display: 'Cinzel Decorative', serif;   /* couple's names only */
+  --font-heading: 'Marcellus', serif;            /* section headings, eyebrows */
+  --font-body: 'Mukta', sans-serif;              /* body copy, UI */
+
+  --ease-royal: cubic-bezier(.22,.61,.36,1);
+  --section-pad: clamp(3.6rem, 8vw, 7rem);
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+
+body{
+  margin:0;
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *, *::before, *::after{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+h1,h2,h3,h4{ margin:0; font-family: var(--font-heading); color: var(--maroon-800); font-weight: 400; }
+a{ color: inherit; }
+img{ max-width:100%; display:block; }
+
+.eyebrow{
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  font-size: 0.72rem;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible{
+  outline: 2px solid var(--marigold);
+  outline-offset: 3px;
+}
+
+/* jali lattice wash used as a subtle repeating backdrop */
+.jali-bg{
+  background-image: url('../assets/jali-pattern.svg');
+  background-repeat: repeat;
+  background-size: 60px 60px;
+}
+
+/* ornate corner frame — reusable on any relatively-positioned box */
+.framed{ position:relative; }
+.framed::before, .framed::after,
+.framed .corner-tr, .framed .corner-bl{
+  content:"";
+  position:absolute;
+  width: 64px; height:64px;
+  background: url('../assets/corner-ornament.svg') no-repeat center / contain;
+  opacity: 0.85;
+  pointer-events:none;
+}
+.framed::before{ top:10px; left:10px; }
+.framed::after{ bottom:10px; right:10px; transform: rotate(180deg); }
+.framed .corner-tr{ top:10px; right:10px; transform: rotate(90deg); position:absolute; }
+.framed .corner-bl{ bottom:10px; left:10px; transform: rotate(-90deg); position:absolute; }
+
+.ornate-divider{ display:flex; justify-content:center; padding: 0.4rem 0 2.4rem; }
+.ornate-divider img{ width: 200px; height:auto; opacity:0.9; }
+
+/* =========================================================
+   GATE — "Open Invitation"
+   ========================================================= */
+#gate{
+  position: fixed; inset:0; z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(circle at 50% 30%, var(--maroon-700) 0%, var(--maroon-900) 75%);
+  transition: opacity 1s var(--ease-royal), visibility 1s;
+}
+#gate.gate--hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+
+.gate-petals{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+
+.gate-inner{
+  position: relative;
+  z-index:2;
+  text-align:center;
+  color: var(--ivory);
+  padding: 3rem 2.2rem;
+  max-width: 460px;
+}
+
+.gate-mandala{
+  width: 150px; height:150px;
+  margin: 0 auto 0.6rem;
+  animation: mandalaGlow 6s ease-in-out infinite;
+}
+@keyframes mandalaGlow{
+  0%,100%{ opacity: 0.85; transform: rotate(0deg); }
+  50%{ opacity: 1; transform: rotate(6deg); }
+}
+
+.gate-eyebrow{
+  display:block;
+  font-family: var(--font-heading);
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--gold-bright);
+  margin-bottom: 0.6rem;
+}
+
+.gate-names{
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  color: var(--ivory);
+  line-height: 1.3;
+}
+.gate-names .amp{
+  display:block;
+  color: var(--gold-bright);
+  font-size: 0.55em;
+  margin: 0.15em 0;
+}
+
+.gate-divider{ width: 170px; margin: 1.4rem auto; opacity: 0.85; }
+
+.btn-open{
+  margin-top: 0.6rem;
+  font-family: var(--font-heading);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  background: transparent;
+  color: var(--gold-bright);
+  border: 1px solid var(--gold);
+  padding: 0.9rem 2.4rem;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.35s var(--ease-royal), color 0.35s var(--ease-royal);
+}
+.btn-open:hover{ background: var(--gold); color: var(--maroon-900); }
+
+.gate-sub{
+  margin-top: 1.2rem;
+  font-size: 0.8rem;
+  color: rgba(251,243,228,0.6);
+  font-style: italic;
+}
+
+/* =========================================================
+   SITE CHROME
+   ========================================================= */
+#site{ opacity:0; transition: opacity 1s var(--ease-royal) 0.25s; }
+#site.site--visible{ opacity:1; }
+
+.petal-field{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:1; }
+.petal{ position:absolute; top:-6%; width:16px; height:16px; animation: drift linear infinite; }
+.petal img{ width:100%; height:100%; }
+@keyframes drift{
+  0%{ transform: translateY(-10vh) translateX(0) rotate(0deg); }
+  100%{ transform: translateY(112vh) translateX(var(--drift-x, 30px)) rotate(300deg); }
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{
+  position:relative;
+  min-height: 100svh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding: 2.5rem 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(74,14,23,0.94), rgba(58,10,17,0.97)),
+    radial-gradient(circle at 50% 20%, var(--maroon-700), var(--maroon-900) 70%);
+  color: var(--ivory);
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: url('../assets/jali-pattern.svg');
+  background-size: 90px 90px;
+  opacity: 0.14;
+}
+
+.hero-corner{
+  position:absolute; width: clamp(70px, 13vw, 130px); z-index:2; opacity:0.9;
+}
+.hero-corner.tl{ top:18px; left:18px; }
+.hero-corner.tr{ top:18px; right:18px; transform: rotate(90deg); }
+.hero-corner.bl{ bottom:18px; left:18px; transform: rotate(-90deg); }
+.hero-corner.br{ bottom:18px; right:18px; transform: rotate(180deg); }
+
+.hero-content{ position:relative; z-index:3; max-width: 620px; }
+.hero-eyebrow{ display:block; margin-bottom: 1rem; color: var(--gold-bright); }
+
+.hero-mandala{ width: 92px; margin: 0 auto 1.2rem; opacity:0.92; }
+
+.hero-names{
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 8vw, 4.2rem);
+  color: var(--ivory);
+  line-height: 1.25;
+}
+.hero-names .amp{ display:block; color: var(--gold-bright); font-size: 0.5em; margin: 0.2em 0; }
+
+.hero-date{
+  margin-top: 1.6rem;
+  font-family: var(--font-heading);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  color: var(--gold-light);
+}
+.hero-place{ margin-top: 0.5rem; font-style: italic; color: rgba(251,243,228,0.75); }
+
+.scroll-cue{ margin-top: 3rem; width:1px; height:44px; background: linear-gradient(var(--gold), transparent); position:relative; z-index:3; }
+.scroll-cue::after{
+  content:""; position:absolute; left:50%; bottom:0; width:5px; height:5px; border-radius:50%;
+  background: var(--gold-bright); transform: translateX(-50%); animation: cueMove 1.8s ease-in-out infinite;
+}
+@keyframes cueMove{ 0%{ transform: translate(-50%,-8px); opacity:0; } 30%{ opacity:1; } 100%{ transform: translate(-50%,28px); opacity:0; } }
+
+/* =========================================================
+   SECTION SHARED
+   ========================================================= */
+section{ padding: var(--section-pad) 1.5rem; position:relative; }
+.section-head{ text-align:center; max-width: 620px; margin: 0 auto 3rem; }
+.section-head h2{ font-size: clamp(1.7rem, 4vw, 2.3rem); margin-top:0.5rem; }
+.section-head p{ margin-top: 0.9rem; color: var(--maroon-700); opacity:0.85; }
+
+/* =========================================================
+   WEDDING EVENTS (multi-function schedule — genuinely sequential)
+   ========================================================= */
+.events{ background: var(--ivory-dim); }
+.events-grid{
+  max-width: 980px; margin:0 auto;
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr));
+  gap: 1.6rem;
+}
+.event-card{
+  background: var(--ivory);
+  border: 1px solid rgba(200,155,60,0.4);
+  padding: 2rem 1.5rem;
+  text-align:center;
+  position:relative;
+}
+.event-card .day{
+  font-family: var(--font-heading);
+  color:var(--gold);
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  font-size:0.72rem;
+}
+.event-card h3{ margin-top:0.5rem; font-size:1.3rem; color: var(--maroon-800); }
+.event-card .when{ margin-top:0.5rem; font-size:0.85rem; color: var(--marigold); font-style:italic; }
+.event-card .where{ margin-top:0.3rem; font-size:0.85rem; color: var(--ink); opacity:0.75; }
+
+/* =========================================================
+   COUNTDOWN
+   ========================================================= */
+.countdown{ background: var(--maroon-800); color: var(--ivory); text-align:center; position:relative; overflow:hidden; }
+.countdown::before{ content:""; position:absolute; inset:0; background-image:url('../assets/jali-pattern.svg'); background-size:70px 70px; opacity:0.1; }
+.countdown > *{ position:relative; z-index:1; }
+.countdown .eyebrow{ color: var(--gold-bright); }
+.countdown h2{ color: var(--ivory); }
+.countdown-grid{ display:flex; flex-wrap:wrap; gap: clamp(1rem,4vw,3rem); justify-content:center; margin-top: 2.6rem; }
+.countdown-cell{ min-width: 90px; }
+.countdown-cell .num{ font-family: var(--font-display); font-size: clamp(2rem,5.4vw,3rem); color: var(--gold-bright); font-variant-numeric: tabular-nums; }
+.countdown-cell .label{ display:block; margin-top:0.4rem; font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color: rgba(251,243,228,0.65); }
+
+/* =========================================================
+   STORY
+   ========================================================= */
+.story-grid{
+  max-width: 760px; margin: 0 auto; display:grid; gap: 2rem;
+}
+.story-item{ display:grid; grid-template-columns: 60px 1fr; gap: 1.2rem; align-items:start; }
+.story-mark{
+  width:56px; height:56px; border:1px solid var(--gold); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--font-heading); color: var(--gold); background: var(--ivory);
+}
+.story-item h3{ font-size:1.25rem; }
+.story-item time{ display:block; font-size:0.76rem; letter-spacing:0.14em; text-transform:uppercase; color: var(--marigold); margin: 0.25rem 0 0.5rem; }
+.story-item p{ color: var(--ink); opacity:0.85; margin:0; }
+
+/* =========================================================
+   GALLERY
+   ========================================================= */
+.gallery-grid{ max-width: 1080px; margin:0 auto; columns: 3 260px; column-gap: 1.1rem; }
+@media (max-width: 640px){ .gallery-grid{ columns: 2 160px; } }
+.gallery-item{
+  break-inside:avoid; margin-bottom: 1.1rem;
+  border: 6px solid var(--ivory);
+  outline: 1px solid rgba(200,155,60,0.45);
+  cursor: zoom-in;
+  transition: transform 0.4s var(--ease-royal);
+}
+.gallery-item:hover{ transform: translateY(-4px); }
+.gallery-item img{ width:100%; height:auto; }
+
+.lightbox{
+  position:fixed; inset:0; z-index:90; background: rgba(58,10,17,0.94);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; transition: opacity 0.35s var(--ease-royal), visibility 0.35s;
+  padding: 2rem;
+}
+.lightbox.is-active{ opacity:1; visibility:visible; }
+.lightbox img{ max-width:min(90vw,640px); max-height:82vh; border: 6px solid var(--ivory); }
+.lightbox-close{
+  position:absolute; top:22px; right:26px; background:none; border:1px solid var(--ivory);
+  color:var(--ivory); width:40px; height:40px; border-radius:50%; font-size:1.1rem; cursor:pointer;
+}
+
+/* =========================================================
+   RSVP
+   ========================================================= */
+.rsvp{ background: var(--ivory-dim); }
+.rsvp-form{ max-width: 560px; margin:0 auto; display:grid; gap:1.3rem; }
+.field{ display:flex; flex-direction:column; gap:0.5rem; text-align:left; }
+.field label{ font-family: var(--font-heading); font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color: var(--maroon-700); }
+.field input, .field select, .field textarea{
+  font-family: var(--font-body); font-size:1rem; padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(74,14,23,0.25); background: var(--ivory); color: var(--ink); border-radius:2px;
+}
+.field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--marigold); }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:1.3rem; }
+@media (max-width:520px){ .field-row{ grid-template-columns:1fr; } }
+.radio-group{ display:flex; gap:1.6rem; flex-wrap:wrap; }
+.radio-group label{ display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-family: var(--font-body); font-size:0.95rem; color: var(--ink); }
+
+.btn{
+  justify-self:center; margin-top:0.6rem; padding: 0.9rem 2.6rem;
+  background: var(--maroon-800); color: var(--ivory); border: 1px solid var(--maroon-800);
+  font-family: var(--font-heading); letter-spacing:0.18em; text-transform:uppercase; font-size:0.8rem; cursor:pointer;
+  transition: background 0.3s var(--ease-royal), color 0.3s var(--ease-royal);
+}
+.btn:hover{ background: var(--gold); border-color: var(--gold); color: var(--maroon-900); }
+
+.form-note{ text-align:center; font-size:0.85rem; color: var(--marigold); margin-top:1rem; }
+.form-success{ display:none; text-align:center; font-family: var(--font-heading); color: var(--gold); font-size:1.2rem; margin-top:1.2rem; }
+.form-success.is-visible{ display:block; }
+
+/* =========================================================
+   MAP
+   ========================================================= */
+.map-frame{ max-width: 920px; margin:0 auto; border: 6px solid var(--ivory-dim); outline: 1px solid rgba(200,155,60,0.45); }
+.map-frame iframe{ width:100%; height:420px; border:0; display:block; }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer{ text-align:center; padding: 3rem 1.5rem 4rem; background: var(--maroon-900); color: rgba(251,243,228,0.75); position:relative; overflow:hidden; }
+footer::before{ content:""; position:absolute; inset:0; background-image:url('../assets/jali-pattern.svg'); background-size:70px 70px; opacity:0.08; }
+footer > *{ position:relative; z-index:1; }
+footer .foot-mandala{ width: 60px; margin: 0 auto 1rem; opacity:0.85; }
+footer .foot-names{ font-family: var(--font-display); font-size:1.3rem; color: var(--ivory); }
+footer .foot-note{ margin-top:0.8rem; font-size:0.75rem; letter-spacing:0.1em; color: rgba(251,243,228,0.45); }
+
+/* =========================================================
+   MUSIC TOGGLE
+   ========================================================= */
+#music-toggle{
+  position: fixed; bottom:22px; right:22px; z-index:60;
+  min-width: 52px; height:52px; padding: 0 1rem;
+  border-radius: 26px;
+  background: var(--maroon-800); border: 1px solid var(--gold); color: var(--ivory);
+  display:flex; align-items:center; gap:0.5rem; justify-content:center; cursor:pointer;
+  box-shadow: 0 8px 22px rgba(58,10,17,0.35);
+  transition: opacity 1s var(--ease-royal) 0.4s, transform 0.3s var(--ease-royal);
+  opacity:0; pointer-events:none;
+  font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.08em;
+}
+#music-toggle.is-ready{ opacity:1; pointer-events:auto; }
+#music-toggle:hover{ transform: scale(1.05); }
+#music-toggle .note{ color: var(--gold-bright); font-size: 1rem; }
