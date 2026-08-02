@@ -541,6 +541,41 @@ footer .foot-note{ margin-top:0.8rem; font-size:0.75rem; letter-spacing:0.1em; c
 .editor-save{ background: var(--gold); color: var(--maroon-900); }
 .editor-close{ background: transparent; color: var(--ivory); }
 
+@media (max-width: 800px){
+  .events-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 700px){
   .editor-panel{ right: 0.75rem; top: 0.75rem; width: min(320px, calc(100vw - 1.5rem)); }
+
+  .gate-inner{ padding: 2.2rem 1.2rem; }
+  .gate-eyebrow{ letter-spacing: 0.2em; }
+  .btn-open{ letter-spacing: 0.14em; padding: 0.8rem 1.5rem; font-size: 0.72rem; }
+
+  .hero{ min-height: 86svh; padding: 2rem 1rem 1.25rem; }
+  .hero-corner{ width: clamp(52px, 11vw, 78px); }
+  .hero-names{ font-size: clamp(2.2rem, 12vw, 3.4rem); }
+  .hero-date{ letter-spacing: 0.1em; font-size: 0.82rem; }
+  .hero-place{ font-size: 0.95rem; }
+
+  .events-grid{ grid-template-columns: 1fr; gap: 1rem; }
+  .event-card{ padding: 1.5rem 1rem; }
+  .event-card .where{ font-size: 0.8rem; }
+
+  .countdown-grid{ gap: 1rem 1.3rem; }
+  .countdown-cell{ min-width: 72px; }
+
+  .map-frame iframe{ height: 260px; }
+
+  #music-toggle{
+    bottom: 14px; right: 14px; min-width: 46px; height: 46px;
+    padding: 0 0.9rem; font-size: 0.68rem; letter-spacing: 0.06em;
+  }
+}
+
+@media (max-width: 520px){
+  .section-head{ margin-bottom: 2rem; }
+  .section-head h2{ font-size: clamp(1.5rem, 7vw, 2rem); }
+  .section-head p{ font-size: 0.98rem; }
+  .map-location + .map-location{ margin-top: 1.5rem; }
 }
