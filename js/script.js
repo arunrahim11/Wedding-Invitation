@@ -135,6 +135,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const musicToggle = document.getElementById('music-toggle');
   let opened = false;
 
+  function startMusic() {
+    if (!audio || audioFailed) {
+      musicToggle.classList.add('is-paused');
+      return;
+    }
+
+    audio.currentTime = 0;
+    audio.play().then(() => {
+      musicToggle.classList.remove('is-paused');
+      musicToggle.setAttribute('aria-pressed', 'true');
+      musicToggle.setAttribute('aria-label', 'Turn sound off');
+      musicLabel.textContent = 'Sound On';
+    }).catch(() => {
+      audioFailed = true;
+      musicToggle.classList.add('is-paused');
+      musicToggle.setAttribute('aria-pressed', 'false');
+      musicToggle.setAttribute('aria-label', 'Turn sound on');
+      musicLabel.textContent = 'Sound Off';
+    });
+  }
+
   function openInvitation() {
     if (opened) return;
     opened = true;
@@ -143,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     musicToggle.classList.add('is-ready');
     startCountdown();
     buildPetals();
+    startMusic();
   }
 
   openBtn.addEventListener('click', openInvitation);
@@ -195,13 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'petal';
-      p.innerHTML = '<img src="assets/petal.svg" alt="">';
       const left = Math.random() * 100;
       const duration = 12 + Math.random() * 12;
       const delay = Math.random() * 12;
       const driftX = (Math.random() - 0.5) * 150;
+      const size = 10 + Math.random() * 10;
       p.style.left = left + '%';
-      p.style.width = p.style.height = (10 + Math.random() * 10) + 'px';
+      p.style.width = size + 'px';
+      p.style.height = (size * 1.4) + 'px';
       p.style.animationDuration = duration + 's';
       p.style.animationDelay = '-' + delay + 's';
       p.style.setProperty('--drift-x', driftX + 'px');
@@ -367,6 +390,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   renderSavedRSVPs();
+
+  const templeBg = document.querySelector('.temple-background');
+  const updateTempleScroll = () => {
+    if (!templeBg) return;
+    const shift = Math.min(window.scrollY * 0.6, 220);
+    document.documentElement.style.setProperty('--scroll-shift', `${shift}px`);
+    templeBg.style.opacity = Math.min(0.9, 0.38 + (window.scrollY / 1500));
+  };
+
+  updateTempleScroll();
+  window.addEventListener('scroll', updateTempleScroll, { passive: true });
 
   /* ---------------------------------------------------------
      8. SCROLL REVEAL (subtle, respects reduced motion)

@@ -40,6 +40,37 @@ body{
   font-size: 17px;
   line-height: 1.75;
   overflow-x: hidden;
+  position: relative;
+}
+
+.temple-background{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 22px rgba(200, 155, 60, 0.28));
+}
+
+.temple-background img{
+  width: min(78vw, 700px);
+  height: auto;
+  opacity: 0.62;
+  transform: translateY(calc(var(--scroll-shift, 0px) * 0.4));
+  transition: opacity 0.35s ease, transform 0.25s ease;
+  mix-blend-mode: multiply;
+}
+
+.temple-background::before{
+  content: "";
+  position: absolute;
+  inset: 8% 10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,155,60,0.18), rgba(200,155,60,0) 60%);
+  filter: blur(20px);
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -185,8 +216,18 @@ textarea:focus-visible, select:focus-visible{
 #site.site--visible{ opacity:1; }
 
 .petal-field{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:1; }
-.petal{ position:absolute; top:-6%; width:16px; height:16px; animation: drift linear infinite; }
-.petal img{ width:100%; height:100%; }
+.petal{
+  position:absolute; top:-6%; width:16px; height:22px;
+  border-radius: 60% 0 60% 0; transform-origin:center;
+  background: linear-gradient(135deg, rgba(255, 234, 170, 0.95), rgba(231, 145, 75, 0.9));
+  box-shadow: 0 0 10px rgba(232, 196, 104, 0.48);
+  animation: drift linear infinite;
+}
+.petal::before{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.38), rgba(255,255,255,0));
+  border-radius: inherit;
+}
 @keyframes drift{
   0%{ transform: translateY(-10vh) translateX(0) rotate(0deg); }
   100%{ transform: translateY(112vh) translateX(var(--drift-x, 30px)) rotate(300deg); }
@@ -304,9 +345,13 @@ section{ padding: var(--section-pad) 1.5rem; position:relative; }
 /* =========================================================
    LIVE STREAM
    ========================================================= */
-.live-stream{ background: var(--ivory); padding: var(--section-pad) 1.5rem 4.5rem; }
+.live-stream{
+  background: var(--ivory); padding: var(--section-pad) 1.5rem 4.5rem;
+  display:flex; flex-direction:column; align-items:center;
+}
+.live-stream .section-head{ max-width: 760px; margin: 0 auto 2rem; }
 .live-stream-card{
-  position: relative; max-width: 980px; margin: 0 auto;
+  position: relative; width: min(760px, 100%); margin: 0 auto;
   background: linear-gradient(135deg, rgba(58,10,17,0.96), rgba(74,14,23,0.9));
   border: 1px solid rgba(200,155,60,0.45); border-radius: 22px; padding: 1rem;
   box-shadow: 0 18px 40px rgba(58,10,17,0.12);
@@ -403,6 +448,7 @@ section{ padding: var(--section-pad) 1.5rem; position:relative; }
   max-width: 760px; margin: 2.5rem auto 0; background: var(--ivory); border: 1px solid rgba(74,14,23,0.15);
   box-shadow: 0 12px 24px rgba(58,10,17,0.05); padding: 1.2rem 1.2rem 0.8rem;
 }
+.rsvp-history[hidden]{ display:none !important; }
 .rsvp-history-header h3 {
   text-align: center; font-size: 1.15rem; margin-bottom: 1rem; color: var(--maroon-800);
 }
@@ -417,6 +463,9 @@ section{ padding: var(--section-pad) 1.5rem; position:relative; }
 /* =========================================================
    MAP
    ========================================================= */
+.map-location{ margin-top: 0; }
+.map-location + .map-location{ margin-top: 2.2rem; }
+.map-location .section-head{ margin-bottom: 1.5rem; }
 .map-frame{ max-width: 920px; margin:0 auto; border: 6px solid var(--ivory-dim); outline: 1px solid rgba(200,155,60,0.45); }
 .map-frame iframe{ width:100%; height:420px; border:0; display:block; }
 
