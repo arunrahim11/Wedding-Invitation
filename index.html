@@ -104,6 +104,27 @@
     </div>
   </section>
 
+  <section class="live-stream" id="live-stream">
+    <div class="section-head">
+      <span class="eyebrow">Live Ceremony</span>
+      <h2>Watch the Wedding Live</h2>
+      <p>Join the celebration online at the time of the ceremony and share the live link with guests.</p>
+    </div>
+    <div class="live-stream-card">
+      <span class="live-pill">LIVE</span>
+      <div class="live-stream-wrap">
+        <iframe
+          id="live-stream-frame"
+          src="https://www.youtube.com/embed/ScMzIvxBSi4?si=I3OqY9mXyabmD0gG"
+          title="Wedding live stream"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- STORY -->
   <section id="story">
     <div class="section-head">
@@ -148,28 +169,6 @@
   </section>
 
   <div class="ornate-divider" aria-hidden="true"><img src="assets/divider-ornate.svg" alt=""></div>
-
-  <!-- GALLERY -->
-  <section class="events" id="gallery">
-    <div class="section-head">
-      <span class="eyebrow">Gallery</span>
-      <h2>A Few Favorites</h2>
-      <p>Placeholder illustrations for now — see the README for a one-line swap to your own photos.</p>
-    </div>
-    <div class="gallery-grid" id="gallery-grid">
-      <div class="gallery-item"><img src="assets/gallery-1.svg" alt="Pellikoothuru celebrations" loading="lazy"></div>
-      <div class="gallery-item"><img src="assets/gallery-2.svg" alt="Koorallu ceremony" loading="lazy"></div>
-      <div class="gallery-item"><img src="assets/gallery-3.svg" alt="Wedding preparations" loading="lazy"></div>
-      <div class="gallery-item"><img src="assets/gallery-4.svg" alt="Wedding at Tirupathi" loading="lazy"></div>
-      <div class="gallery-item"><img src="assets/gallery-5.svg" alt="Reception in Hyderabad" loading="lazy"></div>
-      <div class="gallery-item"><img src="assets/gallery-6.svg" alt="With family, always" loading="lazy"></div>
-    </div>
-  </section>
-
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightbox-close" aria-label="Close image">&times;</button>
-    <img id="lightbox-img" src="" alt="">
-  </div>
 
   <!-- RSVP -->
   <section class="rsvp" id="rsvp">
@@ -231,6 +230,15 @@
       <p class="form-note" id="form-note">Your reply is sent straight to us — no account needed.</p>
       <p class="form-success" id="form-success">Thank you — your reply has been received. We can't wait to celebrate with you.</p>
     </form>
+
+    <div class="rsvp-history" id="rsvp-history">
+      <div class="rsvp-history-header">
+        <h3>Saved RSVP Responses</h3>
+      </div>
+      <div id="rsvp-history-list" class="rsvp-history-list">
+        <p class="rsvp-history-empty">No responses saved yet.</p>
+      </div>
+    </div>
   </section>
 
   <!-- MAP -->
@@ -289,7 +297,7 @@
   <div class="editor-panel-body">
     <div class="editor-panel-content active" data-panel="preview">
       <p class="editor-summary">Live preview mode</p>
-      <p class="editor-help">Use the Edit tab to update names, date, venue, and the invitation wording.</p>
+      <p class="editor-help">Use the Edit tab to update names, date, venue, and invitation wording.</p>
     </div>
 
     <div class="editor-panel-content" data-panel="edit" hidden>
@@ -316,6 +324,11 @@
       <div class="editor-field">
         <label for="edit-story">Family story line</label>
         <textarea id="edit-story" rows="3">With the divine blessings of our elders, we invite you to grace this auspicious occasion.</textarea>
+      </div>
+
+      <div class="editor-field">
+        <label for="edit-live-link">Live YouTube link</label>
+        <input id="edit-live-link" type="url" value="https://www.youtube.com/embed/ScMzIvxBSi4?si=I3OqY9mXyabmD0gG">
       </div>
 
       <div class="editor-actions">

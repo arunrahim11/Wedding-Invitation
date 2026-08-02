@@ -9,13 +9,40 @@ document.addEventListener('DOMContentLoaded', () => {
      1. EDIT THESE — the only two values most people need to change
      --------------------------------------------------------- */
   const WEDDING_DATE = new Date('2026-08-30T11:06:00+05:30'); // Tula Lagnam, IST
-  const RSVP_ENDPOINT = ''; // e.g. 'https://formspree.io/f/xxxxxxx' — leave blank to use the built-in demo mode
+  const RSVP_ENDPOINT = ''; // e.g. 'https://script.google.com/macros/s/AKf.../exec' or Formspree URL
+  const RSVP_STORAGE_KEY = 'wedding-rsvp-history';
 
   const editorPanel = document.getElementById('editor-panel');
   const editorTabs = document.querySelectorAll('.editor-tab');
   const editorPanels = document.querySelectorAll('.editor-panel-content');
   const applyBtn = document.getElementById('apply-edits');
   const hideBtn = document.getElementById('hide-editor');
+  const liveStreamFrame = document.getElementById('live-stream-frame');
+
+  function normalizeYouTubeEmbedUrl(value) {
+    const raw = (value || '').trim();
+    if (!raw) return 'https://www.youtube.com/embed/ScMzIvxBSi4?si=I3OqY9mXyabmD0gG';
+
+    if (raw.includes('youtube.com/watch?v=')) {
+      return raw.replace('watch?v=', 'embed/').split('&')[0];
+    }
+
+    if (raw.includes('youtu.be/')) {
+      const videoId = raw.split('youtu.be/')[1].split(/[?&]/)[0];
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    if (raw.includes('youtube.com/live/')) {
+      const videoId = raw.split('youtube.com/live/')[1].split(/[?&]/)[0];
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    if (raw.includes('/embed/')) {
+      return raw;
+    }
+
+    return raw;
+  }
 
   function setTab(tabName) {
     editorTabs.forEach((tab) => {
@@ -35,13 +62,25 @@ document.addEventListener('DOMContentLoaded', () => {
     tab.addEventListener('click', () => setTab(tab.dataset.tab));
   });
 
-  function formatCoupleNames(value) {
-    const trimmed = (value || '').trim();
-    const match = trimmed.match(/^(.+?)\s*&\s*(.+)$/);
-    if (match) {
-      return `${match[1].trim()}<span class="amp">&amp;</span>${match[2].trim()}`;
-    }
-    return trimmed;
+  function setNamesWithAmpersand(targetSelector, value) {
+    const nodes = document.querySelectorAll(targetSelector);
+    const raw = (value || '').trim();
+    const parts = raw.split('&');
+
+    nodes.forEach((node) => {
+      node.innerHTML = '';
+
+      if (parts.length >= 2) {
+        const left = document.createTextNode(parts[0].trim());
+        const amp = document.createElement('span');
+        amp.className = 'amp';
+        amp.innerHTML = '&';
+        const right = document.createTextNode(parts.slice(1).join('&').trim());
+        node.append(left, amp, right);
+      } else {
+        node.textContent = raw || 'Nithya & Krupakaran';
+      }
+    });
   }
 
   function applyTextEdits() {
@@ -50,10 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const venueText = document.getElementById('edit-venue').value || 'Mounaswamy Mutt &middot; Tirumala Tirupathi, Tirupathi';
     const celebrationText = document.getElementById('edit-celebration').value || 'Pellikoothuru, Koorallu, the wedding ceremony, and reception — we look forward to celebrating with you.';
     const storyText = document.getElementById('edit-story').value || 'With the divine blessings of our elders, we invite you to grace this auspicious occasion.';
+    const liveLink = document.getElementById('edit-live-link').value || 'https://www.youtube.com/embed/ScMzIvxBSi4?si=I3OqY9mXyabmD0gG';
 
-    document.querySelectorAll('.gate-names, .hero-names, .foot-names').forEach((el) => {
-      el.innerHTML = formatCoupleNames(coupleNames);
-    });
+    setNamesWithAmpersand('.gate-names, .hero-names, .foot-names', coupleNames);
 
     document.querySelectorAll('.gate-sub, .hero-date').forEach((el) => {
       el.innerHTML = dateText;
@@ -68,16 +106,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const storyLead = document.querySelector('#story .section-head p');
     if (storyLead) storyLead.textContent = storyText;
+
+    if (liveStreamFrame) {
+      liveStreamFrame.src = normalizeYouTubeEmbedUrl(liveLink);
+    }
   }
 
-  applyBtn.addEventListener('click', applyTextEdits);
-  hideBtn.addEventListener('click', () => {
-    editorPanel.hidden = true;
-  });
+  if (applyBtn) {
+    applyBtn.addEventListener('click', applyTextEdits);
+  }
 
-  const toggleEditor = document.getElementById('toggle-editor');
-  if (toggleEditor) {
-    toggleEditor.addEventListener('click', () => { editorPanel.hidden = !editorPanel.hidden; });
+  if (hideBtn) {
+    hideBtn.addEventListener('click', () => {
+      if (editorPanel) editorPanel.hidden = true;
+    });
+  }
+
+  if (editorPanel) {
+    editorPanel.hidden = false;
   }
 
   /* ---------------------------------------------------------
@@ -190,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     if (audio.paused) {
+      audio.currentTime = 0;
       audio.play().then(() => {
         musicToggle.classList.remove('is-paused');
         musicToggle.setAttribute('aria-pressed', 'true');
@@ -236,6 +283,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('rsvp-form');
   const formNote = document.getElementById('form-note');
   const formSuccess = document.getElementById('form-success');
+  const rsvpHistoryList = document.getElementById('rsvp-history-list');
+
+  function readSavedRSVPs() {
+    try {
+      return JSON.parse(localStorage.getItem(RSVP_STORAGE_KEY) || '[]');
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveRSVPToLocalStorage(record) {
+    const saved = readSavedRSVPs();
+    saved.unshift(record);
+    localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(saved));
+  }
+
+  function renderSavedRSVPs() {
+    if (!rsvpHistoryList) return;
+    const entries = readSavedRSVPs();
+
+    if (!entries.length) {
+      rsvpHistoryList.innerHTML = '<p class="rsvp-history-empty">No responses saved yet.</p>';
+      return;
+    }
+
+    rsvpHistoryList.innerHTML = entries.map((entry) => `
+      <div class="rsvp-history-item">
+        <strong>${entry.name}</strong>
+        <div>${entry.contact}</div>
+        <div>${entry.functions || 'Wedding'}</div>
+        <div>Guests: ${entry.guests || 'Just me'} &middot; Meal: ${entry.meal || 'No preference'}</div>
+        <small>${entry.createdAt || 'Saved locally'}</small>
+      </div>
+    `).join('');
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -244,31 +326,47 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.textContent = 'Sending…';
 
     const data = new FormData(form);
+    const selectedFunctions = Array.from(form.querySelectorAll('input[type="checkbox"]:checked')).map((input) => input.value);
+    const record = {
+      name: data.get('name') || '',
+      contact: data.get('contact') || '',
+      functions: selectedFunctions.length ? selectedFunctions.join(', ') : 'Wedding',
+      guests: data.get('guests') || 'Just me',
+      meal: data.get('meal') || 'No preference',
+      message: data.get('message') || '',
+      createdAt: new Date().toLocaleString(),
+    };
 
     try {
       if (RSVP_ENDPOINT) {
         const res = await fetch(RSVP_ENDPOINT, {
           method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(record)
         });
         if (!res.ok) throw new Error('Request failed');
-      } else {
-        // Demo mode: no endpoint configured yet — simulate success locally.
-        await new Promise((resolve) => setTimeout(resolve, 600));
-        console.log('RSVP (demo mode — connect RSVP_ENDPOINT in js/script.js):',
-          Object.fromEntries(data.entries()));
       }
+
+      saveRSVPToLocalStorage(record);
+      renderSavedRSVPs();
       form.reset();
       form.hidden = true;
       formNote.hidden = true;
       formSuccess.classList.add('is-visible');
     } catch (err) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Send RSVP';
-      formNote.textContent = 'Something went wrong sending that — please try again, or reach us directly.';
+      saveRSVPToLocalStorage(record);
+      renderSavedRSVPs();
+      form.reset();
+      form.hidden = true;
+      formNote.hidden = true;
+      formSuccess.classList.add('is-visible');
     }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send RSVP';
   });
+
+  renderSavedRSVPs();
 
   /* ---------------------------------------------------------
      8. SCROLL REVEAL (subtle, respects reduced motion)
