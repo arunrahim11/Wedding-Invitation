@@ -135,24 +135,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const musicToggle = document.getElementById('music-toggle');
   let opened = false;
 
-  function startMusic() {
-    if (!audio || audioFailed) {
-      musicToggle.classList.add('is-paused');
-      return;
-    }
-
-    audio.currentTime = 0;
-    audio.play().then(() => {
+  function setMusicUI(isPlaying) {
+    if (isPlaying) {
       musicToggle.classList.remove('is-paused');
       musicToggle.setAttribute('aria-pressed', 'true');
       musicToggle.setAttribute('aria-label', 'Turn sound off');
       musicLabel.textContent = 'Sound On';
-    }).catch(() => {
-      audioFailed = true;
+    } else {
       musicToggle.classList.add('is-paused');
       musicToggle.setAttribute('aria-pressed', 'false');
       musicToggle.setAttribute('aria-label', 'Turn sound on');
       musicLabel.textContent = 'Sound Off';
+    }
+  }
+
+  function startMusic() {
+    if (!audio || audioFailed) {
+      setMusicUI(false);
+      return;
+    }
+
+    audio.muted = false;
+    audio.volume = 0.65;
+    audio.currentTime = 0;
+    audio.play().then(() => {
+      setMusicUI(true);
+    }).catch(() => {
+      audioFailed = true;
+      setMusicUI(false);
     });
   }
 
@@ -255,25 +265,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   musicToggle.addEventListener('click', () => {
     if (audioFailed) {
-      musicToggle.classList.add('is-paused');
+      setMusicUI(false);
       return;
     }
     if (audio.paused) {
+      audio.muted = false;
+      audio.volume = 0.65;
       audio.currentTime = 0;
       audio.play().then(() => {
-        musicToggle.classList.remove('is-paused');
-        musicToggle.setAttribute('aria-pressed', 'true');
-        musicToggle.setAttribute('aria-label', 'Turn sound off');
-        musicLabel.textContent = 'Sound On';
+        setMusicUI(true);
       }).catch(() => {
         audioFailed = true;
+        setMusicUI(false);
       });
     } else {
       audio.pause();
-      musicToggle.classList.add('is-paused');
-      musicToggle.setAttribute('aria-pressed', 'false');
-      musicToggle.setAttribute('aria-label', 'Turn sound on');
-      musicLabel.textContent = 'Sound Off';
+      setMusicUI(false);
     }
   });
 
