@@ -11,6 +11,75 @@ document.addEventListener('DOMContentLoaded', () => {
   const WEDDING_DATE = new Date('2026-08-30T11:06:00+05:30'); // Tula Lagnam, IST
   const RSVP_ENDPOINT = ''; // e.g. 'https://formspree.io/f/xxxxxxx' — leave blank to use the built-in demo mode
 
+  const editorPanel = document.getElementById('editor-panel');
+  const editorTabs = document.querySelectorAll('.editor-tab');
+  const editorPanels = document.querySelectorAll('.editor-panel-content');
+  const applyBtn = document.getElementById('apply-edits');
+  const hideBtn = document.getElementById('hide-editor');
+
+  function setTab(tabName) {
+    editorTabs.forEach((tab) => {
+      const active = tab.dataset.tab === tabName;
+      tab.classList.toggle('active', active);
+      tab.setAttribute('aria-selected', String(active));
+    });
+
+    editorPanels.forEach((panel) => {
+      const active = panel.dataset.panel === tabName;
+      panel.classList.toggle('active', active);
+      panel.hidden = !active;
+    });
+  }
+
+  editorTabs.forEach((tab) => {
+    tab.addEventListener('click', () => setTab(tab.dataset.tab));
+  });
+
+  function formatCoupleNames(value) {
+    const trimmed = (value || '').trim();
+    const match = trimmed.match(/^(.+?)\s*&\s*(.+)$/);
+    if (match) {
+      return `${match[1].trim()}<span class="amp">&amp;</span>${match[2].trim()}`;
+    }
+    return trimmed;
+  }
+
+  function applyTextEdits() {
+    const coupleNames = document.getElementById('edit-couple-names').value || 'Nithya & Krupakaran';
+    const dateText = document.getElementById('edit-date').value || 'Sunday, 30th August 2026 &middot; 11:06 AM';
+    const venueText = document.getElementById('edit-venue').value || 'Mounaswamy Mutt &middot; Tirumala Tirupathi, Tirupathi';
+    const celebrationText = document.getElementById('edit-celebration').value || 'Pellikoothuru, Koorallu, the wedding ceremony, and reception — we look forward to celebrating with you.';
+    const storyText = document.getElementById('edit-story').value || 'With the divine blessings of our elders, we invite you to grace this auspicious occasion.';
+
+    document.querySelectorAll('.gate-names, .hero-names, .foot-names').forEach((el) => {
+      el.innerHTML = formatCoupleNames(coupleNames);
+    });
+
+    document.querySelectorAll('.gate-sub, .hero-date').forEach((el) => {
+      el.innerHTML = dateText;
+    });
+
+    document.querySelectorAll('.hero-place').forEach((el) => {
+      el.innerHTML = venueText;
+    });
+
+    const eventsLead = document.querySelector('#events .section-head p');
+    if (eventsLead) eventsLead.textContent = celebrationText;
+
+    const storyLead = document.querySelector('#story .section-head p');
+    if (storyLead) storyLead.textContent = storyText;
+  }
+
+  applyBtn.addEventListener('click', applyTextEdits);
+  hideBtn.addEventListener('click', () => {
+    editorPanel.hidden = true;
+  });
+
+  const toggleEditor = document.getElementById('toggle-editor');
+  if (toggleEditor) {
+    toggleEditor.addEventListener('click', () => { editorPanel.hidden = !editorPanel.hidden; });
+  }
+
   /* ---------------------------------------------------------
      2. GATE — "Open Invitation"
      --------------------------------------------------------- */

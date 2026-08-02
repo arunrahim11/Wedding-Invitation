@@ -407,3 +407,51 @@ footer .foot-note{ margin-top:0.8rem; font-size:0.75rem; letter-spacing:0.1em; c
 #music-toggle.is-ready{ opacity:1; pointer-events:auto; }
 #music-toggle:hover{ transform: scale(1.05); }
 #music-toggle .note{ color: var(--gold-bright); font-size: 1rem; }
+
+/* =========================================================
+   PREVIEW / EDIT PANEL
+   ========================================================= */
+.editor-panel{
+  position: fixed; right: 1rem; top: 1rem; z-index: 120;
+  width: min(360px, calc(100vw - 2rem));
+  background: rgba(58, 10, 17, 0.96);
+  border: 1px solid rgba(232, 196, 104, 0.5);
+  box-shadow: 0 18px 40px rgba(24, 8, 12, 0.25);
+  color: var(--ivory);
+}
+.editor-tabs{ display:flex; border-bottom:1px solid rgba(232,196,104,0.35); }
+.editor-tab{
+  flex:1; border:0; background: transparent; color: rgba(251,243,228,0.8);
+  font-family: var(--font-heading); letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.9rem 0.75rem; cursor:pointer; transition: background 0.2s ease, color 0.2s ease;
+}
+.editor-tab.active{ background: rgba(200,155,60,0.18); color: var(--gold-bright); }
+.editor-panel-body{ padding: 1rem; }
+.editor-panel-content{ display:none; }
+.editor-panel-content.active{ display:block; }
+.editor-summary{
+  margin:0; font-family: var(--font-heading); letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 0.7rem; color: var(--gold-bright);
+}
+.editor-help{ margin: 0.75rem 0 0; color: rgba(251,243,228,0.8); font-size: 0.9rem; }
+.editor-field{ display:grid; gap: 0.45rem; margin-bottom: 0.9rem; }
+.editor-field label{
+  font-family: var(--font-heading); font-size: 0.66rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold-bright);
+}
+.editor-field input, .editor-field textarea{
+  width: 100%; border: 1px solid rgba(232,196,104,0.4); background: rgba(251,243,228,0.08);
+  color: var(--ivory); padding: 0.7rem 0.8rem; font: inherit; resize: vertical;
+}
+.editor-field input:focus, .editor-field textarea:focus{ outline: 2px solid rgba(232,196,104,0.9); }
+.editor-actions{ display:flex; gap: 0.75rem; margin-top: 0.7rem; }
+.editor-save, .editor-close{
+  flex: 1; border: 1px solid var(--gold); padding: 0.75rem 0.9rem; cursor:pointer;
+  font-family: var(--font-heading); letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.68rem;
+}
+.editor-save{ background: var(--gold); color: var(--maroon-900); }
+.editor-close{ background: transparent; color: var(--ivory); }
+
+@media (max-width: 700px){
+  .editor-panel{ right: 0.75rem; top: 0.75rem; width: min(320px, calc(100vw - 1.5rem)); }
+}
