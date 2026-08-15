@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function normalizeYouTubeEmbedUrl(value) {
     const raw = (value || '').trim();
-    if (!raw) return 'https://www.youtube.com/embed/ScMzIvxBSi4?si=I3OqY9mXyabmD0gG';
+    if (!raw) return 'https://www.youtube.com/embed/2hvAPXF04NA';
 
     if (raw.includes('youtube.com/watch?v=')) {
       return raw.replace('watch?v=', 'embed/').split('&')[0];
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const venueText = document.getElementById('edit-venue').value || 'Mounaswamy Mutt &middot; Tirumala Tirupathi, Tirupathi';
     const celebrationText = document.getElementById('edit-celebration').value || 'Pellikoothuru, Koorallu, the wedding ceremony, and reception — we look forward to celebrating with you.';
     const storyText = document.getElementById('edit-story').value || 'With the divine blessings of our elders, we invite you to grace this auspicious occasion.';
-    const liveLink = document.getElementById('edit-live-link').value || 'https://www.youtube.com/embed/ScMzIvxBSi4?si=I3OqY9mXyabmD0gG';
+    const liveLink = document.getElementById('edit-live-link').value || 'https://www.youtube.com/embed/2hvAPXF04NA';
 
     setNamesWithAmpersand('.gate-names, .hero-names, .foot-names', coupleNames);
 
