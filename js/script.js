@@ -432,3 +432,43 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
+/* Video Player Modal Functions */
+function openVideoPlayer() {
+  const modal = document.getElementById('videoModal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVideoPlayer() {
+  const modal = document.getElementById('videoModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  // Stop video when closing
+  const videoFrame = document.getElementById('videoFrame');
+  videoFrame.src = videoFrame.src;
+}
+
+function redirectToYouTube() {
+  const videoUrl = 'https://www.youtube.com/watch?v=2hvAPXF04NA';
+  // Try to open YouTube app on mobile, fallback to web
+  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+    // Try native app first
+    window.location.href = 'youtube://www.youtube.com/watch?v=2hvAPXF04NA';
+    // Fallback to web after 1 second
+    setTimeout(() => {
+      window.open(videoUrl, '_blank');
+    }, 1000);
+  } else {
+    // Desktop - just open in new tab
+    window.open(videoUrl, '_blank');
+  }
+}
+
+// Close modal when clicking outside the video
+document.addEventListener('click', function(event) {
+  const modal = document.getElementById('videoModal');
+  if (event.target === modal) {
+    closeVideoPlayer();
+  }
+});

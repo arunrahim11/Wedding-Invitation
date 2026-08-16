@@ -104,10 +104,28 @@
     <div class="live-stream-card">
       <span class="live-pill">LIVE</span>
       <div class="live-stream-wrap video-player" style="position: relative; background: url('https://img.youtube.com/vi/2hvAPXF04NA/maxresdefault.jpg') center/cover; cursor: pointer;">
-        <button class="video-play-btn" onclick="window.open('https://www.youtube.com/watch?v=2hvAPXF04NA', '_blank')" onmouseover="this.style.background='rgba(255, 0, 0, 0.95)'" onmouseout="this.style.background='rgba(255, 0, 0, 0.8)'">
+        <button class="video-play-btn" onclick="openVideoPlayer()" onmouseover="this.style.background='rgba(255, 0, 0, 0.95)'" onmouseout="this.style.background='rgba(255, 0, 0, 0.8)'">
           <span class="play-icon"></span>
         </button>
-        <button class="video-watch-btn" onclick="window.open('https://www.youtube.com/watch?v=2hvAPXF04NA', '_blank')" onmouseover="this.style.background='rgba(220, 20, 20, 1)'" onmouseout="this.style.background='rgba(220, 20, 20, 0.9)'">Watch Now</button>
+        <button class="video-watch-btn" onclick="redirectToYouTube()" onmouseover="this.style.background='rgba(220, 20, 20, 1)'" onmouseout="this.style.background='rgba(220, 20, 20, 0.9)'">Watch Now</button>
+      </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center;">
+      <div style="position: relative; width: 90vw; height: 90vh; max-width: 1200px; max-height: 675px;">
+        <iframe 
+          id="videoFrame"
+          width="100%" 
+          height="100%" 
+          src="https://www.youtube.com/embed/2hvAPXF04NA?autoplay=1" 
+          title="Wedding Live Stream" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+        </iframe>
+        <button onclick="closeVideoPlayer()" style="position: absolute; top: -40px; right: 0; background: white; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;">×</button>
       </div>
     </div>
   </section>
